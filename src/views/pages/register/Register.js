@@ -13,11 +13,14 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
   // const [passIn, setPassIn] = useState('')
   const [showPass, setShowPass] = useState(false)
   const [showConfirmPass, setShowConfirmPass] = useState(false)
+
+  const navigate = useNavigate()
 
   // const handlePass = () => {
   //   // if (showPass === true) {
@@ -140,7 +143,12 @@ const Register = () => {
                     </CCol>
                   </CRow>
                   <CRow>
-                    <CButton color="link" className="mx-0" style={{ paddingLeft: '95px' }}>
+                    <CButton
+                      color="link"
+                      className="mx-0"
+                      style={{ paddingLeft: '95px' }}
+                      onClick={() => navigate('/login')}
+                    >
                       Sign in
                     </CButton>
                   </CRow>
