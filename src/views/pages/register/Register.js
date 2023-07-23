@@ -147,7 +147,7 @@ const Register = () => {
                       color="link"
                       className="mx-0"
                       style={{ paddingLeft: '95px' }}
-                      onClick={() => navigate('/login')}
+                      onClick={() => navigate('/')}
                     >
                       Sign in
                     </CButton>
