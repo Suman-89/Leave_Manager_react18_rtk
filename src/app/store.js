@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { configureStore } from '@reduxjs/toolkit'
-import EmpLeaveData from '../features/registerSlice'
+import RegisterSlice from '../features/registerSlice'
 
 export const store = configureStore({
   reducer: {
-    leaveData: EmpLeaveData,
+    register: RegisterSlice,
   },
 })

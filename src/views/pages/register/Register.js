@@ -16,6 +16,7 @@ import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { empRegister } from 'src/action/reduxAction'
+// import { rootApi } from 'src/RootApi'
 
 const Register = () => {
   const [showPass, setShowPass] = useState(false)
@@ -54,12 +55,11 @@ const Register = () => {
       setErrStatus(true)
       setPassErr('Password does not match*')
       setTimeout(() => {
-        setErrStatus(true)
+        setErrStatus(false)
         setPassErr('')
       }, 2000)
     } else {
       const newEmployee = {
-        id: Date.now(),
         username: registerNew.empUsername,
         first_name: registerNew.empFirstName,
         last_name: registerNew.empLastName,
@@ -67,12 +67,20 @@ const Register = () => {
         password: registerNew.empPassword,
         confirm_password: registerNew.empConfPassword,
       }
+      // rootApi
+      //   .post(`/create-new-user`, newEmployee)
+      //   .then((res) => {
+      //     console.log('res:', res)
+      //   })
+      //   .catch((err) => {
+      //     console.log('err:', err)
+      //   })
       dispatch(empRegister(newEmployee))
-        .then((res) => {
-          console.log('resonse_dispatch:', res)
-          if (res?.meta?.requestStatus === 'fulfilled') {
+        .then((response) => {
+          console.log('response:', response)
+          if (response?.meta?.requestStatus === 'fulfilled') {
             setErrStatus(false)
-            setMessage('User registered successfully *')
+            setMessage('Registered successfully !')
             setPassErr('Password matched !')
             setTimeout(() => {
               setMessage('')
@@ -85,6 +93,7 @@ const Register = () => {
                 empPassword: '',
                 empConfPassword: '',
               })
+              // navigate('/')
             }, 2000)
           }
         })
