@@ -14,23 +14,85 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { empRegister } from 'src/action/reduxAction'
 
 const Register = () => {
-  // const [passIn, setPassIn] = useState('')
   const [showPass, setShowPass] = useState(false)
   const [showConfirmPass, setShowConfirmPass] = useState(false)
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const [registerNew, setRegisterNew] = useState({
+    empUsername: '',
+    empFirstName: '',
+    empLastName: '',
+    empEmail: '',
+    empPassword: '',
+    empConfPassword: '',
+  })
+  const [message, setMessage] = useState('')
+  const [passErr, setPassErr] = useState('')
+  const [errStatus, setErrStatus] = useState(false)
 
-  // const handlePass = () => {
-  //   // if (showPass === true) {
-  //   //   setShowPass(false)
-  //   // }
-  //   setShowPass(true)
-  // }
-  // const handlePassHide = () => {
-  //   setShowPass(false)
-  // }
+  const createAccount = () => {
+    if (
+      !registerNew.empUsername ||
+      !registerNew.empFirstName ||
+      !registerNew.empLastName ||
+      !registerNew.empEmail ||
+      !registerNew.empPassword ||
+      !registerNew.empConfPassword
+    ) {
+      setErrStatus(true)
+      setMessage('Please fill all fields *')
+      setTimeout(() => {
+        setErrStatus(false)
+        setMessage('')
+      }, 2000)
+    } else if (registerNew.empPassword !== registerNew.empConfPassword) {
+      setErrStatus(true)
+      setPassErr('Password does not match*')
+      setTimeout(() => {
+        setErrStatus(true)
+        setPassErr('')
+      }, 2000)
+    } else {
+      const newEmployee = {
+        id: Date.now(),
+        username: registerNew.empUsername,
+        first_name: registerNew.empFirstName,
+        last_name: registerNew.empLastName,
+        email: registerNew.empEmail,
+        password: registerNew.empPassword,
+        confirm_password: registerNew.empConfPassword,
+      }
+      dispatch(empRegister(newEmployee))
+        .then((res) => {
+          console.log('resonse_dispatch:', res)
+          if (res?.meta?.requestStatus === 'fulfilled') {
+            setErrStatus(false)
+            setMessage('User registered successfully *')
+            setPassErr('Password matched !')
+            setTimeout(() => {
+              setMessage('')
+              setPassErr('')
+              setRegisterNew({
+                empUsername: '',
+                empFirstName: '',
+                empLastName: '',
+                empEmail: '',
+                empPassword: '',
+                empConfPassword: '',
+              })
+            }, 2000)
+          }
+        })
+        .catch((err) => {
+          console.log('err:', err)
+        })
+    }
+  }
 
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
@@ -46,7 +108,14 @@ const Register = () => {
                     <CInputGroupText>
                       <CIcon icon={cilUser} />
                     </CInputGroupText>
-                    <CFormInput placeholder="Enter username" autoComplete="username" />
+                    <CFormInput
+                      placeholder="Enter username"
+                      autoComplete="username"
+                      value={registerNew.empUsername}
+                      onChange={(evt) =>
+                        setRegisterNew({ ...registerNew, empUsername: evt.target.value })
+                      }
+                    />
                   </CInputGroup>
 
                   <CRow xs={6}>
@@ -55,7 +124,14 @@ const Register = () => {
                         <CInputGroupText>
                           <CIcon icon={cilUser} />
                         </CInputGroupText>
-                        <CFormInput placeholder="Firstname" autoComplete="firstname" />
+                        <CFormInput
+                          placeholder="Firstname"
+                          autoComplete="firstname"
+                          value={registerNew.empFirstName}
+                          onChange={(evt) =>
+                            setRegisterNew({ ...registerNew, empFirstName: evt.target.value })
+                          }
+                        />
                       </CInputGroup>
                     </CCol>
                     <CCol>
@@ -63,14 +139,28 @@ const Register = () => {
                         <CInputGroupText>
                           <CIcon icon={cilUser} />
                         </CInputGroupText>
-                        <CFormInput placeholder="Lastname" autoComplete="lastname" />
+                        <CFormInput
+                          placeholder="Lastname"
+                          autoComplete="lastname"
+                          value={registerNew.empLastName}
+                          onChange={(evt) =>
+                            setRegisterNew({ ...registerNew, empLastName: evt.target.value })
+                          }
+                        />
                       </CInputGroup>
                     </CCol>
                   </CRow>
 
                   <CInputGroup className="mb-3">
                     <CInputGroupText>@</CInputGroupText>
-                    <CFormInput placeholder="Enter email" autoComplete="email" />
+                    <CFormInput
+                      placeholder="Enter email"
+                      autoComplete="email"
+                      value={registerNew.empEmail}
+                      onChange={(evt) =>
+                        setRegisterNew({ ...registerNew, empEmail: evt.target.value })
+                      }
+                    />
                   </CInputGroup>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
@@ -82,10 +172,13 @@ const Register = () => {
                       autoComplete="new-password"
                       className="form-control"
                       style={{ borderRightColor: '#fff' }}
+                      value={registerNew.empPassword}
+                      onChange={(evt) =>
+                        setRegisterNew({ ...registerNew, empPassword: evt.target.value })
+                      }
                     />
 
                     <CInputGroupText style={{ backgroundColor: '#fff' }}>
-                      {/* <CIcon icon={cilLowVision} /> */}
                       {showPass === true ? (
                         <i
                           className="fa fa-eye"
@@ -110,6 +203,10 @@ const Register = () => {
                       placeholder="Repeat password"
                       autoComplete="repeat-password"
                       style={{ borderRightColor: '#fff' }}
+                      value={registerNew.empConfPassword}
+                      onChange={(evt) =>
+                        setRegisterNew({ ...registerNew, empConfPassword: evt.target.value })
+                      }
                     />
 
                     <CInputGroupText style={{ backgroundColor: '#fff' }}>
@@ -129,9 +226,18 @@ const Register = () => {
                       )}
                     </CInputGroupText>
                   </CInputGroup>
+                  {passErr ? (
+                    <span
+                      style={{ color: errStatus === true ? 'red' : 'green', textAlign: 'center' }}
+                    >
+                      {passErr}
+                    </span>
+                  ) : (
+                    <></>
+                  )}
                   <CRow>
                     <CCol xs={6}>
-                      <CButton color="success" className="px-4">
+                      <CButton color="success" className="px-4" onClick={() => createAccount()}>
                         Create Account
                       </CButton>
                     </CCol>
@@ -154,6 +260,13 @@ const Register = () => {
                   </CRow>
                 </CForm>
               </CCardBody>
+              {message ? (
+                <span style={{ color: errStatus === true ? 'red' : 'green', textAlign: 'center' }}>
+                  {message}
+                </span>
+              ) : (
+                <></>
+              )}
             </CCard>
           </CCol>
         </CRow>

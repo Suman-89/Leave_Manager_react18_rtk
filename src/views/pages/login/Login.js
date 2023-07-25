@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   CButton,
@@ -18,10 +18,14 @@ import { cilLockLocked, cilUser } from '@coreui/icons'
 
 const Login = () => {
   const navigate = useNavigate()
+  const [viewPass, setViewPass] = useState(false)
 
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
+        <div className="row m-3">
+          <h1 style={{ textAlign: 'center' }}>Leave Management System</h1>
+        </div>
         <CRow className="justify-content-center">
           <CCol md={8}>
             <CCardGroup>
@@ -41,10 +45,26 @@ const Login = () => {
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
                       <CFormInput
-                        type="password"
+                        type={viewPass === true ? 'text' : 'password'}
                         placeholder="Password"
                         autoComplete="current-password"
+                        style={{ borderRightColor: '#fff' }}
                       />
+                      <CInputGroupText style={{ backgroundColor: '#fff' }}>
+                        {viewPass === true ? (
+                          <i
+                            className="fa fa-eye"
+                            style={{ backgroundColor: '#fff' }}
+                            onClick={() => setViewPass(false)}
+                          ></i>
+                        ) : (
+                          <i
+                            className="fa fa-eye-slash"
+                            style={{ backgroundColor: '#fff' }}
+                            onClick={() => setViewPass(true)}
+                          ></i>
+                        )}
+                      </CInputGroupText>
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
