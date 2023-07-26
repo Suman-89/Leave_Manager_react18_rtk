@@ -93,7 +93,7 @@ const Register = () => {
                 empPassword: '',
                 empConfPassword: '',
               })
-              // navigate('/')
+              navigate('/')
             }, 2000)
           }
         })

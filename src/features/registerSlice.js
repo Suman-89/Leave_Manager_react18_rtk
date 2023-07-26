@@ -16,7 +16,7 @@ const RegisterSlice = createSlice({
       state.loading=true
     });
     builder.addCase(empRegister.fulfilled,(state,action)=>{
-      state.employeeRegisterData = [...state.employeeRegisterData, action.payload]
+      state.employeeRegisterData = action.payload
       state.loading=false
     });
     builder.addCase(empRegister.rejected,(state,action)=>{
