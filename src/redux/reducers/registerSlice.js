@@ -1,13 +1,13 @@
 /* eslint-disable prettier/prettier */
 import { createSlice } from '@reduxjs/toolkit'
-import { empRegister } from 'src/action/reduxAction'
+import { empRegister } from 'src/redux/action/registerAction'
 const initialState = {
   employeeRegisterData: {},
   loading: false,
   error: null,
 }
 const RegisterSlice = createSlice({
-  name: 'RegisterSlice',
+  name: 'registerSlice',
   initialState: initialState,
   reducers: {},
   extraReducers: function(builder) {

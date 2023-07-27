@@ -15,7 +15,7 @@ import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { empRegister } from 'src/action/reduxAction'
+import { empRegister } from 'src/redux/action/registerAction'
 // import { rootApi } from 'src/RootApi'
 
 const Register = () => {

@@ -16,7 +16,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useDispatch } from 'react-redux'
-import { userLoginAction } from 'src/action/loginAction'
+import { userLoginAction } from 'src/redux/action/loginAction'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -45,15 +45,12 @@ const Login = () => {
         username: userLoginState.empUserName,
         password: userLoginState.empPassword,
       }
-      const inputData = {
-        user: inputFieldData,
-      }
-      console.log('inputData:', inputData)
-      dispatch(userLoginAction(inputData))
+
+      console.log('inputData:', inputFieldData)
+      dispatch(userLoginAction(inputFieldData))
         .then((response) => {
           console.log('response:', response)
           if (response?.meta?.requestStatus === 'fulfilled') {
-            // const empLoginData =
             console.log('response:', response)
             setErrStatus(false)
             setMessage('Login is successfull *')

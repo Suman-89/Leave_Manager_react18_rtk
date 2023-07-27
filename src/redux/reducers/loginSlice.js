@@ -1,13 +1,13 @@
 /* eslint-disable prettier/prettier */
 import { createSlice } from '@reduxjs/toolkit'
-import { userLoginAction } from 'src/action/loginAction'
+import { userLoginAction } from 'src/redux/action/loginAction'
 
 const initialState = {
   empLoginData: {},
   isLoading: false
 }
 
-const loginSlice = createSlice({
+const LoginSlice = createSlice({
     name:'loginSlice',
     initialState:initialState,
     reducers:{},
@@ -26,4 +26,4 @@ const loginSlice = createSlice({
     }
 })
 
-export default loginSlice.reducer
+export default LoginSlice.reducer
