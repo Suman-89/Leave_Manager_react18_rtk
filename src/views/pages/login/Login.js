@@ -15,10 +15,59 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import { useDispatch } from 'react-redux'
+import { userLoginAction } from 'src/action/loginAction'
 
 const Login = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [viewPass, setViewPass] = useState(false)
+  //Login state defined
+  const [userLoginState, setUserLoginState] = useState({
+    empUserName: '',
+    empPassword: '',
+  })
+  const [message, setMessage] = useState('')
+  const [errStatus, setErrStatus] = useState(false)
+
+  //Function defined
+  const userLogin = (e) => {
+    e.preventDefault()
+    if (!userLoginState.empUserName || !userLoginState.empPassword) {
+      setErrStatus(true)
+      setMessage('Please fill all fields *')
+      setTimeout(() => {
+        setErrStatus(false)
+        setMessage('')
+      }, 2000)
+    } else {
+      const inputFieldData = {
+        username: userLoginState.empUserName,
+        password: userLoginState.empPassword,
+      }
+      const inputData = {
+        user: inputFieldData,
+      }
+      console.log('inputData:', inputData)
+      dispatch(userLoginAction(inputData))
+        .then((response) => {
+          console.log('response:', response)
+          if (response?.meta?.requestStatus === 'fulfilled') {
+            // const empLoginData =
+            console.log('response:', response)
+            setErrStatus(false)
+            setMessage('Login is successfull *')
+            setUserLoginState({
+              empUserName: '',
+              empPassword: '',
+            })
+          }
+        })
+        .catch((err) => {
+          console.log('err:', err)
+        })
+    }
+  }
 
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
@@ -31,14 +80,30 @@ const Login = () => {
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
-                  <CForm>
+                  <CForm onSubmit={userLogin}>
                     <h1>Login</h1>
+                    {message ? (
+                      <span
+                        style={{ color: errStatus === true ? 'red' : 'green', textAlign: 'center' }}
+                      >
+                        {message}
+                      </span>
+                    ) : (
+                      <></>
+                    )}
                     <p className="text-medium-emphasis">Sign In to your account</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="Username" autoComplete="username" />
+                      <CFormInput
+                        placeholder="Username"
+                        autoComplete="username"
+                        value={userLoginState.empUserName}
+                        onChange={(e) =>
+                          setUserLoginState({ ...userLoginState, empUserName: e.target.value })
+                        }
+                      />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
@@ -49,6 +114,10 @@ const Login = () => {
                         placeholder="Password"
                         autoComplete="current-password"
                         style={{ borderRightColor: '#fff' }}
+                        value={userLoginState.empPassword}
+                        onChange={(e) =>
+                          setUserLoginState({ ...userLoginState, empPassword: e.target.value })
+                        }
                       />
                       <CInputGroupText style={{ backgroundColor: '#fff' }}>
                         {viewPass === true ? (
@@ -68,7 +137,7 @@ const Login = () => {
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
-                        <CButton color="primary" className="px-4">
+                        <CButton color="primary" className="px-4" type="submit">
                           Login
                         </CButton>
                       </CCol>
@@ -85,10 +154,10 @@ const Login = () => {
                 <CCardBody className="text-center">
                   <div>
                     <h2>Sign up</h2>
-                    <p>
+                    {/* <p>
                       Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                       tempor incididunt ut labore et dolore magna aliqua.
-                    </p>
+                    </p> */}
                     <Link to="/register">
                       <CButton
                         color="primary"

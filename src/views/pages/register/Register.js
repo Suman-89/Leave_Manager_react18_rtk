@@ -93,7 +93,7 @@ const Register = () => {
                 empPassword: '',
                 empConfPassword: '',
               })
-              navigate('/')
+              navigate('/login')
             }, 2000)
           }
         })
@@ -262,7 +262,7 @@ const Register = () => {
                       color="link"
                       className="mx-0"
                       style={{ paddingLeft: '95px' }}
-                      onClick={() => navigate('/')}
+                      onClick={() => navigate('/login')}
                     >
                       Sign in
                     </CButton>
