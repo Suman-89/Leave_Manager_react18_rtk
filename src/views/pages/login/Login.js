@@ -15,9 +15,8 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-import { useDispatch } from 'react-redux'
-import { userLoginAction } from 'src/redux/action/loginAction'
-import { resetInterceptor } from 'src/RootApi'
+import { useDispatch, useSelector } from 'react-redux'
+import API from '../../../api'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -34,6 +33,7 @@ const Login = () => {
   //Function defined
   const userLogin = (e) => {
     e.preventDefault()
+
     if (!userLoginState.empUserName || !userLoginState.empPassword) {
       setErrStatus(true)
       setMessage('Please fill all fields *')
@@ -42,40 +42,30 @@ const Login = () => {
         setMessage('')
       }, 2000)
     } else {
-      const inputFieldData = {
+      const loginFormData = {
         username: userLoginState.empUserName,
         password: userLoginState.empPassword,
       }
 
-      console.log('inputData:', inputFieldData)
-      dispatch(userLoginAction(inputFieldData))
+      API.post('/jwt-auth/v1/token', loginFormData)
         .then((response) => {
-          console.log('response:', response)
-          if (response?.meta?.requestStatus === 'fulfilled') {
-            const empLoggedData = response?.payload
-            console.log('empLoggedData:', empLoggedData)
-            setErrStatus(false)
-            setMessage('Login is successfull *')
-            localStorage.setItem('empLogData', JSON.stringify(empLoggedData))
-            setUserLoginState({
-              empUserName: '',
-              empPassword: '',
-            })
-            window.location.reload()
-            const loggedData = localStorage.getItem('empLogData')
-
-            if (loggedData) {
-              const empToken = JSON.parse(loggedData).token
-              console.log('empToken:', empToken)
-
-              if (empToken) {
-                resetInterceptor(empToken)
-              }
-            }
-          }
+          console.log('response-->', response)
+          const userData = response.data
+          localStorage.setItem('userLogData', JSON.stringify(userData))
         })
         .catch((err) => {
-          console.log('err:', err)
+          console.log(err.response)
+          const { status, data } = err.response
+          if (status === 403) {
+            setErrStatus(true)
+
+            setMessage('Error! Login failed')
+          }
+          if (status === 404) {
+            setErrStatus(true)
+
+            setMessage('Error! Login failed')
+          }
         })
     }
   }
