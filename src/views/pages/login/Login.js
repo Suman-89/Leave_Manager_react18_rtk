@@ -17,6 +17,7 @@ import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useDispatch } from 'react-redux'
 import { userLoginAction } from 'src/redux/action/loginAction'
+import { resetInterceptor } from 'src/RootApi'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -51,13 +52,26 @@ const Login = () => {
         .then((response) => {
           console.log('response:', response)
           if (response?.meta?.requestStatus === 'fulfilled') {
-            console.log('response:', response)
+            const empLoggedData = response?.payload
+            console.log('empLoggedData:', empLoggedData)
             setErrStatus(false)
             setMessage('Login is successfull *')
+            localStorage.setItem('empLogData', JSON.stringify(empLoggedData))
             setUserLoginState({
               empUserName: '',
               empPassword: '',
             })
+            window.location.reload()
+            const loggedData = localStorage.getItem('empLogData')
+
+            if (loggedData) {
+              const empToken = JSON.parse(loggedData).token
+              console.log('empToken:', empToken)
+
+              if (empToken) {
+                resetInterceptor(empToken)
+              }
+            }
           }
         })
         .catch((err) => {

@@ -18,6 +18,19 @@ rootApi.interceptors.request.use((config) => {
 
     return config
   })
+  rootApi.interceptors.response.use((config)=>{
+    console.log('config_interceptor:',config)
+    return config;
+  },
+  (err)=>{
+    console.log('err_interceptor:',err)
+    if(err.response.data.code === "jwt_auth_bad_auth_header"){
+      localStorage.removeItem('empLogData')
+      window.location.reload()
+      window.location.href='/'
+    }
+  }
+  )
 }
 
 export { rootApi as default }
