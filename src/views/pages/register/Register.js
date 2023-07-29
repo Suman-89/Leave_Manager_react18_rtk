@@ -16,7 +16,7 @@ import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { empRegister } from 'src/redux/action/registerAction'
-// import { rootApi } from 'src/RootApi'
+// import { API } from 'src/api'
 
 const Register = () => {
   const [showPass, setShowPass] = useState(false)
@@ -67,7 +67,7 @@ const Register = () => {
         password: registerNew.empPassword,
         confirm_password: registerNew.empConfPassword,
       }
-      // rootApi
+      // API
       //   .post(`/create-new-user`, newEmployee)
       //   .then((res) => {
       //     console.log('res:', res)
