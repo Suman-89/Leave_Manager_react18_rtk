@@ -20,7 +20,7 @@ const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
 function PrivateRoute({ children }) {
-  const empData = localStorage.getItem('empLogData')
+  const empData = localStorage.getItem('userLogData')
   console.log('empData:', empData)
   return empData != null ? (
     <>{children}</>
@@ -31,7 +31,7 @@ function PrivateRoute({ children }) {
   )
 }
 function PublicRoute({ children }) {
-  const empData = localStorage.getItem('empLogData')
+  const empData = localStorage.getItem('userLogData')
   console.log('empData:', empData)
   return empData === null ? (
     <>{children}</>

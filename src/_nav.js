@@ -26,6 +26,27 @@ const _nav = [
       text: 'NEW',
     },
   },
+
+  // New Custom Menu
+  {
+    component: CNavGroup,
+    name: 'Leave',
+    to: '/leave',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Apply Leave',
+        to: '/leave/leave-apply',
+      },
+      {
+        component: CNavItem,
+        name: 'My Details',
+        to: '/base/breadcrumbs',
+      },
+    ],
+  },
+  //  End Custom Menu
   {
     component: CNavTitle,
     name: 'Theme',
