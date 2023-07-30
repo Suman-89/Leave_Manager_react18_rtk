@@ -15,12 +15,12 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-import { useDispatch, useSelector } from 'react-redux'
+// import { useDispatch } from 'react-redux'
 import API from '../../../api'
 
 const Login = () => {
   const navigate = useNavigate()
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const [viewPass, setViewPass] = useState(false)
   //Login state defined
   const [userLoginState, setUserLoginState] = useState({
@@ -52,6 +52,7 @@ const Login = () => {
           console.log('response-->', response)
           const userData = response.data
           localStorage.setItem('userLogData', JSON.stringify(userData))
+          window.location.reload()
         })
         .catch((err) => {
           console.log(err.response)

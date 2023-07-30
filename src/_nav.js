@@ -1,6 +1,7 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
+  cilAddressBook,
   cilBell,
   cilCalculator,
   cilChartPie,
@@ -21,10 +22,10 @@ const _nav = [
     name: 'Dashboard',
     to: '/dashboard',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-    badge: {
-      color: 'info',
-      text: 'NEW',
-    },
+    // badge: {
+    //   color: 'info',
+    //   text: 'NEW',
+    // },
   },
 
   // New Custom Menu
@@ -32,7 +33,7 @@ const _nav = [
     component: CNavGroup,
     name: 'Leave',
     to: '/leave',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilAddressBook} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
