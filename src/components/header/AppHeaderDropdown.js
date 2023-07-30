@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
+  CAlert,
   CAvatar,
   CBadge,
   CDropdown,
@@ -26,13 +27,25 @@ import CIcon from '@coreui/icons-react'
 import avatar8 from './../../assets/images/avatars/8.jpg'
 
 const AppHeaderDropdown = () => {
+  const [viewMsg, setViewMsg] = useState('')
+  const pageLogOut = () => {
+    localStorage.removeItem('userLogData')
+    setViewMsg('Logged out successfully')
+    setTimeout(() => {
+      setViewMsg('')
+    }, 1000)
+    window.location.reload()
+  }
+
   return (
-    <CDropdown variant="nav-item">
-      <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>
-        <CAvatar src={avatar8} size="md" />
-      </CDropdownToggle>
-      <CDropdownMenu className="pt-0" placement="bottom-end">
-        {/* <CDropdownHeader className="bg-light fw-semibold py-2">Account</CDropdownHeader>
+    <>
+      {viewMsg ? <CAlert color="primary">{viewMsg}</CAlert> : <></>}
+      <CDropdown variant="nav-item">
+        <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>
+          <CAvatar src={avatar8} size="md" />
+        </CDropdownToggle>
+        <CDropdownMenu className="pt-0" placement="bottom-end">
+          {/* <CDropdownHeader className="bg-light fw-semibold py-2">Account</CDropdownHeader>
         <CDropdownItem href="#">
           <CIcon icon={cilBell} className="me-2" />
           Updates
@@ -61,20 +74,20 @@ const AppHeaderDropdown = () => {
             42
           </CBadge>
         </CDropdownItem> */}
-        <CDropdownHeader className="bg-light fw-semibold py-2">Settings</CDropdownHeader>
-        <CDropdownItem href="#">
-          <CIcon icon={cilUser} className="me-2" />
-          Profile
-        </CDropdownItem>
-        <CDropdownItem href="#">
-          <CIcon icon={cilSettings} className="me-2" />
-          Settings
-        </CDropdownItem>
-        <CDropdownItem href="#">
-          <CIcon icon={cilAccountLogout} className="me-2" />
-          Log out
-        </CDropdownItem>
-        {/* <CDropdownItem href="#">
+          <CDropdownHeader className="bg-light fw-semibold py-2">Settings</CDropdownHeader>
+          <CDropdownItem href="#">
+            <CIcon icon={cilUser} className="me-2" />
+            Profile
+          </CDropdownItem>
+          <CDropdownItem href="#">
+            <CIcon icon={cilSettings} className="me-2" />
+            Settings
+          </CDropdownItem>
+          <CDropdownItem href="#" onClick={() => pageLogOut()}>
+            <CIcon icon={cilAccountLogout} className="me-2" />
+            Log out
+          </CDropdownItem>
+          {/* <CDropdownItem href="#">
           <CIcon icon={cilCreditCard} className="me-2" />
           Payments
           <CBadge color="secondary" className="ms-2">
@@ -93,8 +106,9 @@ const AppHeaderDropdown = () => {
           <CIcon icon={cilLockLocked} className="me-2" />
           Lock Account
         </CDropdownItem> */}
-      </CDropdownMenu>
-    </CDropdown>
+        </CDropdownMenu>
+      </CDropdown>
+    </>
   )
 }
 
