@@ -1,4 +1,5 @@
 import {
+  CButton,
   CCard,
   CCardBody,
   CCardHeader,
@@ -9,67 +10,83 @@ import {
   CDropdownToggle,
   CForm,
   CFormLabel,
-  CInputGroupText,
+  // CInputGroupText,
   CRow,
+  CSpinner,
   CWidgetStatsA,
 } from '@coreui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import CIcon from '@coreui/icons-react'
-import { cilLightbulb, cilLockLocked, cilSpeedometer } from '@coreui/icons'
+// import CIcon from '@coreui/icons-react'
+// import { cilLightbulb, cilLockLocked, cilSpeedometer } from '@coreui/icons'
+import { useDispatch, useSelector } from 'react-redux'
+import { assignedLeavesAction } from 'src/redux/action/assignedLeavesAction'
 
 const LeaveApply = () => {
+  const dispatch = useDispatch()
+  const { leaves, loading } = useSelector((state) => state.leaves)
   const [startdate, setStartDate] = useState(new Date())
   const [lastdate, setLastDate] = useState(new Date())
 
+  //for qiell //
   const [value, setValue] = useState('')
+
+  useEffect(() => {
+    dispatch(assignedLeavesAction())
+  }, [])
 
   return (
     <>
-      <CRow>
-        <CCol xs={12}>
-          <CCard className="mb-4">
-            <CCardHeader>
-              <strong>React Form Control</strong>
-            </CCardHeader>
-            <CCardBody>
-              <CRow>
-                <CCol xs={4}>
-                  <CWidgetStatsA
-                    className="mb-4"
-                    color="success"
-                    inverse
-                    value="21"
-                    title="Casual leaves"
-                  />
-                </CCol>
-                <CCol xs={4}>
-                  <CWidgetStatsA
-                    className="mb-4"
-                    color="info"
-                    inverse
-                    value="72"
-                    title="Sick leaves"
-                  />
-                </CCol>
+      {loading === true ? (
+        <CSpinner color="secondary" className="my-3" />
+      ) : (
+        <CRow>
+          <CCol xs={12}>
+            <CCard className="mb-4">
+              <CCardHeader>
+                <strong>Number of Leaves</strong>
+              </CCardHeader>
+              <CCardBody>
+                {leaves.map((leaveData, index) => (
+                  <CRow key={index}>
+                    <CCol xs={4}>
+                      <CWidgetStatsA
+                        className="mb-4"
+                        color="success"
+                        inverse={value.toString()}
+                        value={leaveData.casual_leave}
+                        title="Casual leaves"
+                      />
+                    </CCol>
+                    <CCol xs={4}>
+                      <CWidgetStatsA
+                        className="mb-4"
+                        color="info"
+                        inverse={value.toString()}
+                        value={leaveData.sick_leave}
+                        title="Sick leaves"
+                      />
+                    </CCol>
 
-                <CCol xs={4}>
-                  <CWidgetStatsA
-                    className="mb-4"
-                    color="primary"
-                    inverse
-                    value="69"
-                    title="Earned leaves"
-                  />
-                </CCol>
-              </CRow>
-            </CCardBody>
-          </CCard>
-        </CCol>
-      </CRow>
+                    <CCol xs={4}>
+                      <CWidgetStatsA
+                        className="mb-4"
+                        color="primary"
+                        inverse={value.toString()}
+                        value={leaveData.earn_leave}
+                        title="Earned leaves"
+                      />
+                    </CCol>
+                  </CRow>
+                ))}
+              </CCardBody>
+            </CCard>
+          </CCol>
+        </CRow>
+      )}
 
       <CRow>
         <CCol xs={12}>
@@ -110,11 +127,19 @@ const LeaveApply = () => {
                   <CFormLabel htmlFor="exampleFormControlTextarea1">Reason to Leave</CFormLabel>
                   {/* <CFormTextarea id="exampleFormControlTextarea1" rows="3"></CFormTextarea> */}
                   <ReactQuill
+                    className="mb-3"
                     placeholder="Type reason here"
                     theme="snow"
                     value={value}
                     onChange={setValue}
                   />
+                </div>
+                <div className="row">
+                  <CCol xs={12}>
+                    <CButton color="primary" type="submit">
+                      Submit
+                    </CButton>
+                  </CCol>
                 </div>
               </CForm>
             </CCardBody>
