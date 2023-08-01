@@ -19,8 +19,9 @@ import {
 import React, { useEffect, useState } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
+import { DatePicker } from 'react-rainbow-components'
+// import DatePicker from 'react-datepicker'
+// import 'react-datepicker/dist/react-datepicker.css'
 // import CIcon from '@coreui/icons-react'
 // import { cilLightbulb, cilLockLocked, cilSpeedometer } from '@coreui/icons'
 import { useDispatch, useSelector } from 'react-redux'
@@ -44,19 +45,25 @@ const LeaveApply = () => {
 
   useEffect(() => {
     //manager name start//
-    API.get(`/wp-jwt/v1/employee-projectmanager-relation`).then((res)=>{
-      console.log('res:',res)
-      if(res.status === 200){
+    API.get(`/wp-jwt/v1/employee-projectmanager-relation`).then((res) => {
+      console.log('res:', res)
+      if (res.status === 200) {
         setManager(res.data.data)
       }
-    }).catch((err)=>{
-      console.log('err:',err)
+    }).catch((err) => {
+      console.log('err:', err)
     })
     //manager name end//
-    
+
     dispatch(assignedLeavesAction())
     // dispatch(managerNameAction())
   }, [])
+
+  //submit leave 
+  const leaveSubmit = (e)=>{
+    e.preventDefault()
+    console.log('e:',e)
+  }
 
   return (
     <>
@@ -115,17 +122,33 @@ const LeaveApply = () => {
               <strong>Leave Application of Rahul Kumar</strong>
             </CCardHeader>
             <CCardBody>
-              <CForm>
+              <CForm onSubmit={leaveSubmit}>
                 <div className="row mb-3">
                   <div className="col-md-4">
                     <CFormLabel htmlFor="exampleFormControlInput1">Start Date :</CFormLabel>
                     <br />
-                    <DatePicker onChange={(e) => setStartDate(e)} selected={startdate} />
+                    {/* <DatePicker onChange={(e) => setStartDate(e)} selected={startdate} /> */}
+                    <div className="rainbow-m-around_small">
+                      <DatePicker
+                        formatStyle="medium"
+                        value={startdate}
+                        // label="DatePicker Label"
+                        onChange={(e) => setStartDate(e)}
+                      />
+                    </div>
                   </div>
                   <div className="col-md-4">
                     <CFormLabel htmlFor="exampleFormControlInput1">End Date : </CFormLabel>
                     <br />
-                    <DatePicker onChange={(e) => setLastDate(e)} selected={lastdate} />
+                    <div className="rainbow-m-around_small">
+                      <DatePicker
+                        formatStyle="medium"
+                        value={lastdate}
+                        // label="DatePicker Label"
+                        onChange={(e) => setLastDate(e)}
+                      />
+                    </div>
+                    {/* <DatePicker onChange={(e) => setLastDate(e)} selected={lastdate} /> */}
                   </div>
                   <div className="col-md-4">
                     <CFormLabel htmlFor="exampleFormControlInput1">
@@ -134,7 +157,7 @@ const LeaveApply = () => {
                     <br />
                     {/* <ManagerName /> */}
                     <CDropdown>
-                      <CDropdownToggle color="light"> Select option </CDropdownToggle>
+                      <CDropdownToggle color="outline-dark" shape='rounded-pill'> Select option </CDropdownToggle>
                       {manager.map((data) => (
                         <CDropdownMenu key={data.id}>
                           <CDropdownItem href="#">{data.name}</CDropdownItem>
@@ -153,6 +176,7 @@ const LeaveApply = () => {
                     theme="snow"
                     value={value}
                     onChange={setValue}
+                    // style={{height:'auto'}}
                   />
                 </div>
                 <div className="row">
