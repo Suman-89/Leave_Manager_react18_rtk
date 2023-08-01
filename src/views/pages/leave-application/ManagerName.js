@@ -6,7 +6,7 @@ import { managerNameAction } from 'src/redux/action/managerNameAction'
 
 const ManagerName = () => {
   const dispatch = useDispatch()
-  const { manager } = useSelector((managerState) => managerState.managerName)
+  const { manager } = useSelector((state) => state.managerName)
 
   useEffect(() => {
     dispatch(managerNameAction())
@@ -17,7 +17,7 @@ const ManagerName = () => {
         <CDropdownToggle color="light"> Select option </CDropdownToggle>
         {manager.map((data, index) => (
           <CDropdownMenu key={index}>
-            <CDropdownItem href="#">{data}</CDropdownItem>
+            <CDropdownItem href="#">{data.name}</CDropdownItem>
           </CDropdownMenu>
         ))}
       </CDropdown>

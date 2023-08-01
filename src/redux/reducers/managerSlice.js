@@ -5,23 +5,23 @@ import { managerNameAction } from '../action/managerNameAction'
 
 const initialState = {
   manager: [],
-  loading: true,
+  isloading: true,
 }
 
 const ManagerNameSlice = createSlice({
-  name: 'noOfLeaves',
+  name: 'manager',
   initialState: initialState,
   reducers: {},
   extraReducers: function (builder) {
     builder.addCase(managerNameAction.pending, (state) => {
-      state.loading = true
+      state.isloading = true
     })
     builder.addCase(managerNameAction.fulfilled, (state, action) => {
-      state.loading = false
+      state.isloading = false
       state.manager = action.payload
     })
     builder.addCase(managerNameAction.rejected, (state) => {
-      state.loading = true
+      state.isloading = true
       state.manager = []
     })
   },

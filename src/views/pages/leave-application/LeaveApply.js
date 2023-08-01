@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   CButton,
   CCard,
@@ -24,18 +25,37 @@ import 'react-datepicker/dist/react-datepicker.css'
 // import { cilLightbulb, cilLockLocked, cilSpeedometer } from '@coreui/icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { assignedLeavesAction } from 'src/redux/action/assignedLeavesAction'
+// import ManagerName from './ManagerName'
+// import { managerNameAction } from 'src/redux/action/managerNameAction'
+import API from '../../../api'
+
 
 const LeaveApply = () => {
   const dispatch = useDispatch()
   const { leaves, loading } = useSelector((state) => state.leaves)
+  // const { manager } = useSelector((state) => state.managerName)
   const [startdate, setStartDate] = useState(new Date())
   const [lastdate, setLastDate] = useState(new Date())
 
   //for qiell //
   const [value, setValue] = useState('')
+  //for manager name //
+  const [manager, setManager] = useState([])
 
   useEffect(() => {
+    //manager name start//
+    API.get(`/wp-jwt/v1/employee-projectmanager-relation`).then((res)=>{
+      console.log('res:',res)
+      if(res.status === 200){
+        setManager(res.data.data)
+      }
+    }).catch((err)=>{
+      console.log('err:',err)
+    })
+    //manager name end//
+    
     dispatch(assignedLeavesAction())
+    // dispatch(managerNameAction())
   }, [])
 
   return (
@@ -112,19 +132,20 @@ const LeaveApply = () => {
                       Project Manager/Superior
                     </CFormLabel>
                     <br />
+                    {/* <ManagerName /> */}
                     <CDropdown>
                       <CDropdownToggle color="light"> Select option </CDropdownToggle>
-                      <CDropdownMenu>
-                        <CDropdownItem href="#">Prabhat Kanti Pandit</CDropdownItem>
-                        <CDropdownItem href="#">Sehbaz Khan</CDropdownItem>
-                        <CDropdownItem href="#">Daniel Atwood</CDropdownItem>
-                      </CDropdownMenu>
+                      {manager.map((data) => (
+                        <CDropdownMenu key={data.id}>
+                          <CDropdownItem href="#">{data.name}</CDropdownItem>
+                        </CDropdownMenu>
+                      ))}
                     </CDropdown>
                   </div>
                 </div>
 
                 <div className="mb-3">
-                  <CFormLabel htmlFor="exampleFormControlTextarea1">Reason to Leave</CFormLabel>
+                  <CFormLabel htmlFor="exampleFormControlTextarea1">Reason to Leave :</CFormLabel>
                   {/* <CFormTextarea id="exampleFormControlTextarea1" rows="3"></CFormTextarea> */}
                   <ReactQuill
                     className="mb-3"
