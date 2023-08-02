@@ -30,14 +30,12 @@ import { assignedLeavesAction } from 'src/redux/action/assignedLeavesAction'
 // import ManagerName from './ManagerName'
 // import { managerNameAction } from 'src/redux/action/managerNameAction'
 import API from '../../../api'
-
+import moment from 'moment'
 
 const LeaveApply = () => {
   const dispatch = useDispatch()
   const { leaves, loading } = useSelector((state) => state.leaves)
   // const { manager } = useSelector((state) => state.managerName)
-  const [startdate, setStartDate] = useState(new Date())
-  const [lastdate, setLastDate] = useState(new Date())
 
   //for qiell //
   const [value, setValue] = useState('')
@@ -45,37 +43,41 @@ const LeaveApply = () => {
   const [manager, setManager] = useState([])
   //employe Leave data //
   const [leaveData, setLeaveData] = useState({
-    leaveStartDate:new Date(),
-    leaveEndDate:new Date(),
+    leaveStartDate: new Date(),
+    leaveEndDate: new Date(),
     superiorId: '',
-    reason: ''
+    reason: '',
   })
   const [message, setMessage] = useState('')
   const [errorStatus, setErrorStatus] = useState(false)
 
   useEffect(() => {
     //manager name start//
-    API.get(`/wp-jwt/v1/employee-projectmanager-relation`).then((res) => {
-      console.log('res:', res)
-      if (res.status === 200) {
-        setManager(res.data.data)
-      }
-    }).catch((err) => {
-      console.log('err:', err)
-    })
+    API.get(`/wp-jwt/v1/employee-projectmanager-relation`)
+      .then((res) => {
+        console.log('res:', res)
+        if (res.status === 200) {
+          setManager(res.data.data)
+        }
+      })
+      .catch((err) => {
+        console.log('err:', err)
+      })
     //manager name end//
 
     dispatch(assignedLeavesAction())
     // dispatch(managerNameAction())
   }, [])
 
-  //submit leave 
+  //submit leave
   const leaveSubmit = (e) => {
     e.preventDefault()
-    if (!leaveData.leaveStartDate ||
+    if (
+      !leaveData.leaveStartDate ||
       !leaveData.leaveEndDate ||
       !leaveData.reason ||
-      !leaveData.superiorId) {
+      !leaveData.superiorId
+    ) {
       setErrorStatus(true)
       setMessage('Please fullfill all info !')
       setTimeout(() => {
@@ -92,13 +94,30 @@ const LeaveApply = () => {
     }
   }
 
+  console.log(
+    'leaveStartDate-->',
+    leaveData.leaveStartDate,
+    moment(leaveData.leaveStartDate).format('l'),
+    moment(leaveData.leaveStartDate).format('YYYY-MM-DD'),
+  )
+
   return (
     <>
       {loading === true ? (
         <CSpinner color="secondary" className="my-3" />
       ) : (
         <>
-          {message ? (<CAlert className='my-3' color={errorStatus === true ? 'danger' : 'success'} style={{width:'40%',margin:'0 auto 0',textAlign:'center'}} >{message}</CAlert>) : (<></>)}
+          {message ? (
+            <CAlert
+              className="my-3"
+              color={errorStatus === true ? 'danger' : 'success'}
+              style={{ width: '40%', margin: '0 auto 0', textAlign: 'center' }}
+            >
+              {message}
+            </CAlert>
+          ) : (
+            <></>
+          )}
           <CRow>
             <CCol xs={12}>
               <CCard className="mb-4">
@@ -159,9 +178,11 @@ const LeaveApply = () => {
                         <div className="rainbow-m-around_small">
                           <DatePicker
                             formatStyle="medium"
-                            value={startdate}
-                            // label="DatePicker Label"
-                            onChange={(e) => setStartDate(e)}
+                            value={moment(leaveData.leaveStartDate).format('l')}
+                            onChange={(e) => {
+                              console.log('e-->', e)
+                              setLeaveData({ ...leaveData, leaveStartDate: e })
+                            }}
                           />
                         </div>
                       </div>
@@ -171,9 +192,11 @@ const LeaveApply = () => {
                         <div className="rainbow-m-around_small">
                           <DatePicker
                             formatStyle="medium"
-                            value={lastdate}
-                            // label="DatePicker Label"
-                            onChange={(e) => setLastDate(e)}
+                            value={moment(leaveData.leaveEndDate).format('l')}
+                            onChange={(e) => {
+                              console.log('e-->', e)
+                              setLeaveData({ ...leaveData, leaveEndDate: e })
+                            }}
                           />
                         </div>
                         {/* <DatePicker onChange={(e) => setLastDate(e)} selected={lastdate} /> */}
@@ -185,7 +208,10 @@ const LeaveApply = () => {
                         <br />
                         {/* <ManagerName /> */}
                         <CDropdown>
-                          <CDropdownToggle color="outline-dark" shape='rounded-pill'> Select option </CDropdownToggle>
+                          <CDropdownToggle color="outline-dark" shape="rounded-pill">
+                            {' '}
+                            Select option{' '}
+                          </CDropdownToggle>
                           {manager.map((data) => (
                             <CDropdownMenu key={data.id}>
                               <CDropdownItem href="#">{data.name}</CDropdownItem>
@@ -196,7 +222,9 @@ const LeaveApply = () => {
                     </div>
 
                     <div className="mb-3">
-                      <CFormLabel htmlFor="exampleFormControlTextarea1">Reason to Leave :</CFormLabel>
+                      <CFormLabel htmlFor="exampleFormControlTextarea1">
+                        Reason to Leave :
+                      </CFormLabel>
                       {/* <CFormTextarea id="exampleFormControlTextarea1" rows="3"></CFormTextarea> */}
                       <ReactQuill
                         className="mb-3"
@@ -204,7 +232,7 @@ const LeaveApply = () => {
                         theme="snow"
                         value={value}
                         onChange={setValue}
-                      // style={{height:'auto'}}
+                        // style={{height:'auto'}}
                       />
                     </div>
                     <div className="row">
