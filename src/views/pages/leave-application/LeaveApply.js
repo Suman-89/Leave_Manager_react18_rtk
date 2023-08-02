@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {
+  CAlert,
   CButton,
   CCard,
   CCardBody,
@@ -42,6 +43,15 @@ const LeaveApply = () => {
   const [value, setValue] = useState('')
   //for manager name //
   const [manager, setManager] = useState([])
+  //employe Leave data //
+  const [leaveData, setLeaveData] = useState({
+    leaveStartDate:new Date(),
+    leaveEndDate:new Date(),
+    superiorId: '',
+    reason: ''
+  })
+  const [message, setMessage] = useState('')
+  const [errorStatus, setErrorStatus] = useState(false)
 
   useEffect(() => {
     //manager name start//
@@ -60,9 +70,26 @@ const LeaveApply = () => {
   }, [])
 
   //submit leave 
-  const leaveSubmit = (e)=>{
+  const leaveSubmit = (e) => {
     e.preventDefault()
-    console.log('e:',e)
+    if (!leaveData.leaveStartDate ||
+      !leaveData.leaveEndDate ||
+      !leaveData.reason ||
+      !leaveData.superiorId) {
+      setErrorStatus(true)
+      setMessage('Please fullfill all info !')
+      setTimeout(() => {
+        setErrorStatus(false)
+        setMessage('')
+      }, 2000)
+    } else {
+      setErrorStatus(false)
+      setMessage('Added successfully !')
+      setTimeout(() => {
+        setErrorStatus(false)
+        setMessage('')
+      }, 2000)
+    }
   }
 
   return (
@@ -70,127 +97,130 @@ const LeaveApply = () => {
       {loading === true ? (
         <CSpinner color="secondary" className="my-3" />
       ) : (
-        <CRow>
-          <CCol xs={12}>
-            <CCard className="mb-4">
-              <CCardHeader>
-                <strong>Number of Leaves</strong>
-              </CCardHeader>
-              <CCardBody>
-                {leaves.map((leaveData, index) => (
-                  <CRow key={index}>
-                    <CCol xs={4}>
-                      <CWidgetStatsA
-                        className="mb-4"
-                        color="success"
-                        inverse={value.toString()}
-                        value={leaveData.casual_leave}
-                        title="Casual leaves"
-                      />
-                    </CCol>
-                    <CCol xs={4}>
-                      <CWidgetStatsA
-                        className="mb-4"
-                        color="info"
-                        inverse={value.toString()}
-                        value={leaveData.sick_leave}
-                        title="Sick leaves"
-                      />
-                    </CCol>
+        <>
+          {message ? (<CAlert className='my-3' color={errorStatus === true ? 'danger' : 'success'} style={{width:'40%',margin:'0 auto 0',textAlign:'center'}} >{message}</CAlert>) : (<></>)}
+          <CRow>
+            <CCol xs={12}>
+              <CCard className="mb-4">
+                <CCardHeader>
+                  <strong>Number of Leaves</strong>
+                </CCardHeader>
+                <CCardBody>
+                  {leaves.map((leaveData, index) => (
+                    <CRow key={index}>
+                      <CCol xs={4}>
+                        <CWidgetStatsA
+                          className="mb-4"
+                          color="success"
+                          inverse={value.toString()}
+                          value={leaveData.casual_leave}
+                          title="Casual leaves"
+                        />
+                      </CCol>
+                      <CCol xs={4}>
+                        <CWidgetStatsA
+                          className="mb-4"
+                          color="info"
+                          inverse={value.toString()}
+                          value={leaveData.sick_leave}
+                          title="Sick leaves"
+                        />
+                      </CCol>
 
-                    <CCol xs={4}>
-                      <CWidgetStatsA
-                        className="mb-4"
-                        color="primary"
-                        inverse={value.toString()}
-                        value={leaveData.earn_leave}
-                        title="Earned leaves"
+                      <CCol xs={4}>
+                        <CWidgetStatsA
+                          className="mb-4"
+                          color="primary"
+                          inverse={value.toString()}
+                          value={leaveData.earn_leave}
+                          title="Earned leaves"
+                        />
+                      </CCol>
+                    </CRow>
+                  ))}
+                </CCardBody>
+              </CCard>
+            </CCol>
+          </CRow>
+          {/*Apply leave application */}
+          <CRow>
+            <CCol xs={12}>
+              <CCard className="mb-4">
+                <CCardHeader>
+                  <strong>Leave Application of Rahul Kumar</strong>
+                </CCardHeader>
+                <CCardBody>
+                  <CForm onSubmit={leaveSubmit}>
+                    <div className="row mb-3">
+                      <div className="col-md-4">
+                        <CFormLabel htmlFor="exampleFormControlInput1">Start Date :</CFormLabel>
+                        <br />
+                        {/* <DatePicker onChange={(e) => setStartDate(e)} selected={startdate} /> */}
+                        <div className="rainbow-m-around_small">
+                          <DatePicker
+                            formatStyle="medium"
+                            value={startdate}
+                            // label="DatePicker Label"
+                            onChange={(e) => setStartDate(e)}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <CFormLabel htmlFor="exampleFormControlInput1">End Date : </CFormLabel>
+                        <br />
+                        <div className="rainbow-m-around_small">
+                          <DatePicker
+                            formatStyle="medium"
+                            value={lastdate}
+                            // label="DatePicker Label"
+                            onChange={(e) => setLastDate(e)}
+                          />
+                        </div>
+                        {/* <DatePicker onChange={(e) => setLastDate(e)} selected={lastdate} /> */}
+                      </div>
+                      <div className="col-md-4">
+                        <CFormLabel htmlFor="exampleFormControlInput1">
+                          Project Manager/Superior
+                        </CFormLabel>
+                        <br />
+                        {/* <ManagerName /> */}
+                        <CDropdown>
+                          <CDropdownToggle color="outline-dark" shape='rounded-pill'> Select option </CDropdownToggle>
+                          {manager.map((data) => (
+                            <CDropdownMenu key={data.id}>
+                              <CDropdownItem href="#">{data.name}</CDropdownItem>
+                            </CDropdownMenu>
+                          ))}
+                        </CDropdown>
+                      </div>
+                    </div>
+
+                    <div className="mb-3">
+                      <CFormLabel htmlFor="exampleFormControlTextarea1">Reason to Leave :</CFormLabel>
+                      {/* <CFormTextarea id="exampleFormControlTextarea1" rows="3"></CFormTextarea> */}
+                      <ReactQuill
+                        className="mb-3"
+                        placeholder="Type reason here"
+                        theme="snow"
+                        value={value}
+                        onChange={setValue}
+                      // style={{height:'auto'}}
                       />
-                    </CCol>
-                  </CRow>
-                ))}
-              </CCardBody>
-            </CCard>
-          </CCol>
-        </CRow>
+                    </div>
+                    <div className="row">
+                      <CCol xs={12}>
+                        <CButton color="primary" type="submit">
+                          Submit
+                        </CButton>
+                      </CCol>
+                    </div>
+                  </CForm>
+                </CCardBody>
+              </CCard>
+            </CCol>
+          </CRow>
+        </>
       )}
-
-      <CRow>
-        <CCol xs={12}>
-          <CCard className="mb-4">
-            <CCardHeader>
-              <strong>Leave Application of Rahul Kumar</strong>
-            </CCardHeader>
-            <CCardBody>
-              <CForm onSubmit={leaveSubmit}>
-                <div className="row mb-3">
-                  <div className="col-md-4">
-                    <CFormLabel htmlFor="exampleFormControlInput1">Start Date :</CFormLabel>
-                    <br />
-                    {/* <DatePicker onChange={(e) => setStartDate(e)} selected={startdate} /> */}
-                    <div className="rainbow-m-around_small">
-                      <DatePicker
-                        formatStyle="medium"
-                        value={startdate}
-                        // label="DatePicker Label"
-                        onChange={(e) => setStartDate(e)}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-4">
-                    <CFormLabel htmlFor="exampleFormControlInput1">End Date : </CFormLabel>
-                    <br />
-                    <div className="rainbow-m-around_small">
-                      <DatePicker
-                        formatStyle="medium"
-                        value={lastdate}
-                        // label="DatePicker Label"
-                        onChange={(e) => setLastDate(e)}
-                      />
-                    </div>
-                    {/* <DatePicker onChange={(e) => setLastDate(e)} selected={lastdate} /> */}
-                  </div>
-                  <div className="col-md-4">
-                    <CFormLabel htmlFor="exampleFormControlInput1">
-                      Project Manager/Superior
-                    </CFormLabel>
-                    <br />
-                    {/* <ManagerName /> */}
-                    <CDropdown>
-                      <CDropdownToggle color="outline-dark" shape='rounded-pill'> Select option </CDropdownToggle>
-                      {manager.map((data) => (
-                        <CDropdownMenu key={data.id}>
-                          <CDropdownItem href="#">{data.name}</CDropdownItem>
-                        </CDropdownMenu>
-                      ))}
-                    </CDropdown>
-                  </div>
-                </div>
-
-                <div className="mb-3">
-                  <CFormLabel htmlFor="exampleFormControlTextarea1">Reason to Leave :</CFormLabel>
-                  {/* <CFormTextarea id="exampleFormControlTextarea1" rows="3"></CFormTextarea> */}
-                  <ReactQuill
-                    className="mb-3"
-                    placeholder="Type reason here"
-                    theme="snow"
-                    value={value}
-                    onChange={setValue}
-                    // style={{height:'auto'}}
-                  />
-                </div>
-                <div className="row">
-                  <CCol xs={12}>
-                    <CButton color="primary" type="submit">
-                      Submit
-                    </CButton>
-                  </CCol>
-                </div>
-              </CForm>
-            </CCardBody>
-          </CCard>
-        </CCol>
-      </CRow>
     </>
   )
 }
