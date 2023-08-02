@@ -43,8 +43,8 @@ const LeaveApply = () => {
   const [manager, setManager] = useState([])
   //employe Leave data //
   const [leaveData, setLeaveData] = useState({
-    leaveStartDate: new Date(),
-    leaveEndDate: new Date(),
+    leaveStartDate: '',
+    leaveEndDate: '',
     superiorId: '',
     reason: '',
   })
@@ -178,6 +178,7 @@ const LeaveApply = () => {
                         <div className="rainbow-m-around_small">
                           <DatePicker
                             formatStyle="medium"
+                            placeholder="Start Date"
                             value={moment(leaveData.leaveStartDate).format('l')}
                             onChange={(e) => {
                               console.log('e-->', e)
@@ -192,6 +193,7 @@ const LeaveApply = () => {
                         <div className="rainbow-m-around_small">
                           <DatePicker
                             formatStyle="medium"
+                            placeholder="End Date"
                             value={moment(leaveData.leaveEndDate).format('l')}
                             onChange={(e) => {
                               console.log('e-->', e)
