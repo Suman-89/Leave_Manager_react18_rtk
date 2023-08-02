@@ -1,10 +1,8 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable no-unused-vars */
 import { createSlice } from '@reduxjs/toolkit'
 import { managerNameAction } from '../action/managerNameAction'
 
 const initialState = {
-  manager: [],
+  managerList: [],
   isloading: true,
 }
 
@@ -18,11 +16,11 @@ const ManagerNameSlice = createSlice({
     })
     builder.addCase(managerNameAction.fulfilled, (state, action) => {
       state.isloading = false
-      state.manager = action.payload
+      state.managerList = action.payload
     })
     builder.addCase(managerNameAction.rejected, (state) => {
       state.isloading = true
-      state.manager = []
+      state.managerList = []
     })
   },
 })
