@@ -26,16 +26,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import { assignedLeavesAction } from 'src/redux/action/assignedLeavesAction'
 import { managerNameAction } from 'src/redux/action/managerNameAction'
 import API from '../../../api'
+import { ApplyLeaveAction } from 'src/redux/action/applyLeaveAction'
 
 
 const LeaveApply = () => {
   const dispatch = useDispatch()
   const { leaves, loading } = useSelector((state) => state.leaves)
   const { managerList } = useSelector((state) => state.managerName)
-  
 
-  console.log('managerList:',managerList)
- 
+
+  console.log('managerList:', managerList)
+
   //for manager name //
   // const [manager, setManager] = useState([])
 
@@ -73,8 +74,8 @@ const LeaveApply = () => {
     e.preventDefault()
     if (
       !leaveData.reason ||
-      !leaveData.leaveStartDate||
-      !leaveData.leaveEndDate||
+      !leaveData.leaveStartDate ||
+      !leaveData.leaveEndDate ||
       !leaveData.superiorId) {
       setErrorStatus(true)
       setMessage('Please fullfill all info !')
@@ -84,23 +85,35 @@ const LeaveApply = () => {
       }, 2000)
     } else {
       const applyLeaveData = {
-        reason :leaveData.reason,
-        superior_user_id:leaveData.superiorId,
-        start_date:leaveData.leaveStartDate,
-        end_date:leaveData.leaveEndDate
+        reason: leaveData.reason,
+        superior_user_id: leaveData.superiorId,
+        start_date: leaveData.leaveStartDate,
+        end_date: leaveData.leaveEndDate
       }
-      console.log('applyLeaveData:',applyLeaveData)
-      // setLeaveData(applyLeaveData)
-      // setErrorStatus(false)
-      // setMessage('Added successfully !')
-      // setTimeout(() => {
-      //   setErrorStatus(false)
-      //   setMessage('')
-      // }, 2000)
+      console.log('applyLeaveData:', applyLeaveData)
+      dispatch(ApplyLeaveAction(applyLeaveData)).then((res) => {
+        console.log('res =', res)
+        if (res.meta.requestStatus === "fulfilled") {
+          setErrorStatus(false)
+          setMessage('Leave applied successfully !')
+          setTimeout(() => {
+            setErrorStatus(false)
+            setMessage('')
+            setLeaveData({
+              leaveStartDate: "",
+              leaveEndDate: "",
+              superiorId: "",
+              reason: ""
+            })
+          }, 2000)
+        }
+      }).catch((err) => {
+        console.log('err =', err)
+      })
     }
   }
-  console.log('leaveData.leaveStartDate',leaveData.leaveStartDate,typeof leaveData.leaveStartDate)
-  console.log('leaveData.leaveEndDate',leaveData.leaveEndDate,typeof leaveData.leaveEndDate)
+  console.log('leaveData.leaveStartDate', leaveData.leaveStartDate, typeof leaveData.leaveStartDate)
+  console.log('leaveData.leaveEndDate', leaveData.leaveEndDate, typeof leaveData.leaveEndDate)
 
 
   return (
@@ -109,7 +122,6 @@ const LeaveApply = () => {
         <CSpinner color="secondary" className="my-3" />
       ) : (
         <>
-          {message && errorStatus === true ? (<CAlert className='my-3' color={errorStatus === true ? 'danger' : 'success'} style={{ width: '40%', margin: '0 auto 0', textAlign: 'center' }} >{message}</CAlert>) : (<></>)}
           <CRow>
             <CCol xs={12}>
               <CCard className="mb-4">
@@ -168,11 +180,11 @@ const LeaveApply = () => {
                         <br />
                         <div className="rainbow-m-around_small">
                           <input type='date' placeholder='dd/mm/yyyy' value={leaveData.leaveStartDate}
-                           onChange={(e) => setLeaveData({...leaveData,leaveStartDate:e.target.value})
-                          } 
-                          style={{width:'100%'}}
+                            onChange={(e) => setLeaveData({ ...leaveData, leaveStartDate: e.target.value })
+                            }
+                            style={{ width: '100%' }}
                           />
-                        {/* <DatePicker value={startDate} 
+                          {/* <DatePicker value={startDate} 
                         onChange={(e) => {
                           console.log('e start:',e, typeof e)
                           setStartDate(e.target.value)
@@ -193,10 +205,10 @@ const LeaveApply = () => {
                         <CFormLabel htmlFor="exampleFormControlInput1">End Date : </CFormLabel>
                         <br />
                         <div className="rainbow-m-around_small">
-                        <input type='date' placeholder='dd/mm/yyyy' value={leaveData.leaveEndDate}
-                           onChange={(e) => setLeaveData({...leaveData,leaveEndDate:e.target.value})
-                          } 
-                          style={{width:'100%'}}
+                          <input type='date' placeholder='dd/mm/yyyy' value={leaveData.leaveEndDate}
+                            onChange={(e) => setLeaveData({ ...leaveData, leaveEndDate: e.target.value })
+                            }
+                            style={{ width: '100%' }}
                           />
                           {/* <DatePicker
                             formatStyle="medium"
@@ -214,30 +226,30 @@ const LeaveApply = () => {
                         <br />
                         {/* <ManagerName /> */}
                         <select name="managerlist" id="managerlist"
-                        value={leaveData.superiorId}
-                        onChange={(e) => setLeaveData({...leaveData,superiorId:e.target.value})}
-        
-                        style={{width:'100%',height:'46%'}}
+                          value={leaveData.superiorId}
+                          onChange={(e) => setLeaveData({ ...leaveData, superiorId: e.target.value })}
+
+                          style={{ width: '100%', height: '46%' }}
                         >
                           <option value="">Select option</option>
                           {
                             managerList && managerList.map((data) => (
-                          <option value={data.id} key={data.id}>{data.name}</option>
+                              <option value={data.id} key={data.id}>{data.name}</option>
                             ))
                           }
-                        </select>                       
+                        </select>
                       </div>
                     </div>
 
                     <div className="mb-3">
                       <CFormLabel htmlFor="exampleFormControlTextarea1">Reason to Leave :</CFormLabel>
-                      <JoditEditor 
-                      className="mb-3"
-                      placeholder="Type reason here"
-                      value={leaveData.reason}
+                      <JoditEditor
+                        className="mb-3"
+                        placeholder="Type reason here"
+                        value={leaveData.reason}
                         onChange={(e) => {
-                          console.log('e text',e)
-                          setLeaveData({...leaveData,reason:e})
+                          console.log('e text', e)
+                          setLeaveData({ ...leaveData, reason: e })
                         }
                         }
                       />
@@ -254,6 +266,9 @@ const LeaveApply = () => {
                         <CButton color="primary" type="submit">
                           Submit
                         </CButton>
+                        {message ? (<CAlert color={errorStatus === true ? 'danger' : 'success'} style={{ width: '40%', margin: '0 auto 0', textAlign: 'center' }} >
+                          {message}
+                          </CAlert>) : (<></>)}
                       </CCol>
                     </div>
                   </CForm>
