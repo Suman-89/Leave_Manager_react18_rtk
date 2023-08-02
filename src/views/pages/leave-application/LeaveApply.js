@@ -45,8 +45,8 @@ const LeaveApply = () => {
   const [manager, setManager] = useState([])
   //employe Leave data //
   const [leaveData, setLeaveData] = useState({
-    leaveStartDate:new Date(),
-    leaveEndDate:new Date(),
+    leaveStartDate: new Date(),
+    leaveEndDate: new Date(),
     superiorId: '',
     reason: ''
   })
@@ -70,11 +70,12 @@ const LeaveApply = () => {
   }, [])
 
   //submit leave 
-  const leaveSubmit = (e) => {
+  const applyLeave = (e) => {
     e.preventDefault()
-    if (!leaveData.leaveStartDate ||
-      !leaveData.leaveEndDate ||
+    if (
       !leaveData.reason ||
+      !leaveData.leaveStartDate||
+      !leaveData.leaveEndDate||
       !leaveData.superiorId) {
       setErrorStatus(true)
       setMessage('Please fullfill all info !')
@@ -98,7 +99,7 @@ const LeaveApply = () => {
         <CSpinner color="secondary" className="my-3" />
       ) : (
         <>
-          {message ? (<CAlert className='my-3' color={errorStatus === true ? 'danger' : 'success'} style={{width:'40%',margin:'0 auto 0',textAlign:'center'}} >{message}</CAlert>) : (<></>)}
+          {message && errorStatus === true ? (<CAlert className='my-3' color={errorStatus === true ? 'danger' : 'success'} style={{ width: '40%', margin: '0 auto 0', textAlign: 'center' }} >{message}</CAlert>) : (<></>)}
           <CRow>
             <CCol xs={12}>
               <CCard className="mb-4">
@@ -150,7 +151,7 @@ const LeaveApply = () => {
                   <strong>Leave Application of Rahul Kumar</strong>
                 </CCardHeader>
                 <CCardBody>
-                  <CForm onSubmit={leaveSubmit}>
+                  <CForm onSubmit={applyLeave}>
                     <div className="row mb-3">
                       <div className="col-md-4">
                         <CFormLabel htmlFor="exampleFormControlInput1">Start Date :</CFormLabel>
@@ -188,7 +189,7 @@ const LeaveApply = () => {
                           <CDropdownToggle color="outline-dark" shape='rounded-pill'> Select option </CDropdownToggle>
                           {manager.map((data) => (
                             <CDropdownMenu key={data.id}>
-                              <CDropdownItem href="#">{data.name}</CDropdownItem>
+                              <CDropdownItem>{data.name}</CDropdownItem>
                             </CDropdownMenu>
                           ))}
                         </CDropdown>
