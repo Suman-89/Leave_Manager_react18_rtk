@@ -6,6 +6,7 @@ const Typography = React.lazy(() => import('./views/theme/typography/Typography'
 
 // For Leave Application
 const ApplyLeave = React.lazy(() => import('./views/pages/leave-application/LeaveApply'))
+const MyDetails = React.lazy(() => import('./views/pages/leave-application/MyDetails'))
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -58,6 +59,7 @@ const routes = [
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   // Leave Application Routes
   { path: '/leave/leave-apply', name: 'LeaveApply', element: ApplyLeave },
+  { path: '/leave/my-details', name: 'MyDetails', element: MyDetails },
 
   // Leave Application Routes End
 

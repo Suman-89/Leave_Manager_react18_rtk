@@ -6,26 +6,17 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
-  CDropdown,
-  CDropdownItem,
-  CDropdownMenu,
-  CDropdownToggle,
   CForm,
   CFormLabel,
-  // CInputGroupText,
   CRow,
   CSpinner,
   CWidgetStatsA,
 } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 import JoditEditor from 'jodit-react'
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
-import DatePicker from 'react-date-picker'
 import { useDispatch, useSelector } from 'react-redux'
 import { assignedLeavesAction } from 'src/redux/action/assignedLeavesAction'
 import { managerNameAction } from 'src/redux/action/managerNameAction'
-import API from '../../../api'
 import { ApplyLeaveAction } from 'src/redux/action/applyLeaveAction'
 
 
@@ -34,11 +25,7 @@ const LeaveApply = () => {
   const { leaves, loading } = useSelector((state) => state.leaves)
   const { managerList } = useSelector((state) => state.managerName)
 
-
-  console.log('managerList:', managerList)
-
-  //for manager name //
-  // const [manager, setManager] = useState([])
+  // console.log('managerList:', managerList)
 
   //employe Leave data //
   const [leaveData, setLeaveData] = useState({
@@ -47,24 +34,10 @@ const LeaveApply = () => {
     superiorId: "",
     reason: ""
   })
-  // const [startDate,setStartDate] = useState([])
-  // const [startDate,setStartDate] = useState()
-
   const [message, setMessage] = useState('')
   const [errorStatus, setErrorStatus] = useState(false)
 
   useEffect(() => {
-    //manager name start//
-    // API.get(`/wp-jwt/v1/employee-projectmanager-relation`).then((res) => {
-    //   console.log('res:', res)
-    //   if (res.status === 200) {
-    //     setManager(res.data.data)
-    //   }
-    // }).catch((err) => {
-    //   console.log('err:', err)
-    // })
-    //manager name end//
-
     dispatch(assignedLeavesAction())
     dispatch(managerNameAction())
   }, [])
@@ -112,8 +85,8 @@ const LeaveApply = () => {
       })
     }
   }
-  console.log('leaveData.leaveStartDate', leaveData.leaveStartDate, typeof leaveData.leaveStartDate)
-  console.log('leaveData.leaveEndDate', leaveData.leaveEndDate, typeof leaveData.leaveEndDate)
+  // console.log('leaveData.leaveStartDate', leaveData.leaveStartDate, typeof leaveData.leaveStartDate)
+  // console.log('leaveData.leaveEndDate', leaveData.leaveEndDate, typeof leaveData.leaveEndDate)
 
 
   return (
@@ -165,7 +138,7 @@ const LeaveApply = () => {
               </CCard>
             </CCol>
           </CRow>
-          {/*Apply leave application */}
+          {/*Apply leave application start*/}
           <CRow>
             <CCol xs={12}>
               <CCard className="mb-4">
@@ -184,21 +157,6 @@ const LeaveApply = () => {
                             }
                             style={{ width: '100%' }}
                           />
-                          {/* <DatePicker value={startDate} 
-                        onChange={(e) => {
-                          console.log('e start:',e, typeof e)
-                          setStartDate(e.target.value)
-                        } 
-                      }
-                        /> */}
-                          {/* <DatePicker
-                            formatStyle="medium"
-                            placeholder='dd/mm/yyyy'
-                            value={leaveData.leaveStartDate}
-                            onChange={(e) => console.log('e start:',e, typeof e)
-                              // setLeaveData({...leaveData,leaveStartDate:e.target.value})
-                            }
-                          /> */}
                         </div>
                       </div>
                       <div className="col-md-4">
@@ -210,13 +168,6 @@ const LeaveApply = () => {
                             }
                             style={{ width: '100%' }}
                           />
-                          {/* <DatePicker
-                            formatStyle="medium"
-                            placeholder='dd/mm/yyyy'
-                            value={leaveData.leaveEndDate}
-                            onChange={(e) => 
-                              setLeaveData({...leaveData,leaveEndDate:e.target.value})}
-                          /> */}
                         </div>
                       </div>
                       <div className="col-md-4">
@@ -253,13 +204,6 @@ const LeaveApply = () => {
                         }
                         }
                       />
-                      {/* <ReactQuill
-                        className="mb-3"
-                        placeholder="Type reason here"
-                        theme="snow"
-                        value={leaveData.reason}
-                        onChange={(e) => setLeaveData({...leaveData,reason:e.target.value})}
-                      /> */}
                     </div>
                     <div className="row">
                       <CCol xs={12}>
@@ -276,6 +220,7 @@ const LeaveApply = () => {
               </CCard>
             </CCol>
           </CRow>
+          {/*Apply leave application end*/}
         </>
       )}
     </>

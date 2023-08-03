@@ -43,7 +43,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'My Details',
-        to: '/base/breadcrumbs',
+        to: '/leave/my-details',
       },
     ],
   },
