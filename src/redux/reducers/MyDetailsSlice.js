@@ -30,7 +30,9 @@ const MyDetailsSlice = createSlice({
             state.error = 'Unable to fetch data'
             state.userInfo = []
         })
+
     }
 })
+
 
 export default MyDetailsSlice.reducer

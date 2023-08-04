@@ -355,8 +355,8 @@ const Buttons = () => {
               </div>
             </DocsExample>
             <p className="text-medium-emphasis small">
-              Here we create a responsive variation, starting with vertically stacked buttons until
-              the <code>md</code> breakpoint, where <code>.d-md-block</code> replaces the{' '}
+              Here we create a variation, starting with vertically stacked buttons unti
+              <code>md</code> breakpoint, where <code>.d-md-block</code> replaces the{' '}
               <code>.d-grid</code> class, thus nullifying the <code>gap-2</code> utility. Resize
               your browser to see them change.
             </p>
