@@ -4,12 +4,14 @@ import RegisterSlice from './reducers/registerSlice'
 import AssignedLeaveSlice from './reducers/assignedLeaveSlice'
 import ManagerNameSlice from './reducers/managerSlice'
 import applyLeaveSlice from './reducers/applyLeaveSlice'
+import MyDetailsSlice from './reducers/MyDetailsSlice'
 
 export const store = configureStore({
   reducer: {
     register: RegisterSlice,
     leaves: AssignedLeaveSlice,
     managerName: ManagerNameSlice,
-    applyLeave:applyLeaveSlice
+    applyLeave:applyLeaveSlice,
+    empLeaveDetails : MyDetailsSlice
   },
 })
