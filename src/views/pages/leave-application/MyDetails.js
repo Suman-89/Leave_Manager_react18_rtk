@@ -1,6 +1,4 @@
 /* eslint-disable prettier/prettier */
-import { cilLowVision } from '@coreui/icons'
-import CIcon from '@coreui/icons-react'
 import { CButton, CCard, CCardBody, CCardHeader, CCol, CFormInput, CFormSwitch, CRow, CSpinner } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
@@ -10,7 +8,7 @@ import API from '../../../api'
 
 const MyDetails = () => {
   const dispatch = useDispatch()
-  const { userInfo, isLoading, error, success } = useSelector((state) => state.empLeaveDetails)
+  const { userInfo, isLoading } = useSelector((state) => state.empLeaveDetails)
   //search operation state //
   const [filteredUserInfo, setFilteredUserInfo] = useState([])
   const [searchItem, setSearchItem] = useState("")
@@ -90,8 +88,6 @@ const MyDetails = () => {
               {
                 isLoading === true ? (
                   <CSpinner color="secondary"/>
-                ): success === false ? (
-                  {error}
                 ):(
                   <DataTable
                   columns={columns}
@@ -113,8 +109,7 @@ const MyDetails = () => {
                   }
                 />
                 )
-              }
-         
+              }     
             </CCardBody>
           </CCard>
         </CCol>
