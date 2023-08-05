@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { CButton, CCard, CCardBody, CCardHeader, CCol, CForm, CFormInput, CInputGroup, CInputGroupText, CModal, CModalBody, CModalHeader, CModalTitle, CRow, CSpinner } from '@coreui/react'
+import { CButton, CCard, CCardBody, CCardHeader, CCol, CForm, CFormInput, CFormSwitch, CInputGroup, CInputGroupText, CModal, CModalBody, CModalHeader, CModalTitle, CRow, CSpinner } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,19 +9,19 @@ import moment from 'moment/moment'
 import ReactSwitch from 'react-switch'
 
 const MyDetails = () => {
+
   const dispatch = useDispatch()
   const { userInfo, isLoading } = useSelector((state) => state.empLeaveDetails)
+
   //search operation state //
   const [filteredUserInfo, setFilteredUserInfo] = useState([])
   const [searchItem, setSearchItem] = useState("")
-  //switch
-  const [checked, setChecked] = useState(false)
+ 
   //view modal //
   const [openModal, setOpenModal] = useState(false)
   const [viewDetails,setViewDetails] = useState({})
 
-  console.log('userInfo:', userInfo)
-
+  // console.log('userInfo:', userInfo)
 
   const handleSearch = async () => {
     try {
@@ -50,6 +50,7 @@ const MyDetails = () => {
     setViewDetails(data)
     setOpenModal(true)
   }
+ 
 
   const StartDate = ({ row }) => moment(row).format('DD-MMM-YYYY')
   const EndDate = ({ row }) => moment(row).format('DD-MMM-YYYY')
@@ -120,11 +121,7 @@ const MyDetails = () => {
     },
     {
       name: 'Action',
-      cell: (row) => <ReactSwitch
-        onChange={() => setChecked(true)}
-        checked={checked}
-        className="react-switch"
-      />
+      cell: (row) => <CFormSwitch size="lg"/>
     },
   ]
   return (
